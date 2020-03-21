@@ -207,6 +207,46 @@
     }
 </style>
 
+<script>
+    $(function () {
+        //这个值本该从服务器短取出
+        var stock=66;
+        //监听键盘，在输入框的值，变为整数，是否为数字，是否为负数，是否超过库存
+        $("input.productNumberSetting").keyup(function () {
+            var num=$(this).val();
+            num=parseInt(num);
+            if(isNaN(num)){
+                num=1;
+            }
+            if(num<=0){
+                num=1;
+            }
+            if(num>stock){
+                num=stock;
+            }
+            $("input.productNumberSetting").val(num);
+        });
+        //对增加按钮，增加按钮点击事件，取数值，加1，超出库存，值stock 更新
+        $(".increaseNumber").click(function () {
+            var num=$(".productNumberSetting").val();
+            num++;
+            if(num>stock){
+                num=stock;
+            }
+            $(".productNumberSetting").val(num);
+        })
+        $(".decreaseNumber").click(function () {
+            var num=$(".productNumberSetting").val();
+            num--;
+            if(num<=0){
+                num=1;
+            }
+            $(".productNumberSetting").val(num);
+        })
+    })
+
+</script>
+
 <div class="imgAndInfo">
     <div class="imgInimgAndInfo">
         <img width="100px" src="https://how2j.cn/tmall/img/productSingle/8619.jpg">

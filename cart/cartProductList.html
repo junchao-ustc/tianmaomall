@@ -96,6 +96,59 @@
     img.cartProductItemIfSelected, img.selectAllItem{
         cursor: pointer;
     }
+    body{
+        font-size: 12px;
+        font-family: Arial;
+    }
+    div.cartDiv{
+        max-width: 1013px;
+        margin: 10px auto;
+        color: black;
+    }
+    div.cartTitle button{
+        background-color: #AAAAAA;
+        border: 1px solid #AAAAAA;
+        color: white;
+        width: 53px;
+        height: 25px;
+        border-radius: 2px;
+    }
+    span.cartTitlePrice{
+        color: #C40000;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 5px;
+        margin-right: 3px;
+    }
+    div.cartFoot{
+        background-color: #E5E5E5;
+        line-height: 50px;
+        margin: 20px 0px;
+        color: black;
+        padding-left: 20px;
+    }
+    div.cartFoot button{
+        background-color: #AAAAAA;
+        border: 0px solid #AAAAAA;
+        color: white;
+        width: 120px;
+        height: 50px;
+        font-size: 20px;
+        text-align: center;
+    }
+    img.cartProductItemIfSelected, img.selectAllItem{
+        cursor: pointer;
+    }
+    span.cartSumNumber{
+        color: #C40000;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    span.cartSumPrice{
+        color: #C40000;
+        font-weight: bold;
+        font-size: 20px;
+    }
 </style>
 
 <script>
@@ -109,14 +162,14 @@
         //判断是否为整数
         sign=(num==(num=Math.abs(num)));
         //floor向下取整
-        num=Math.floor(num/100+0.50000000001);
+        num=Math.floor(num*100+0.50000000001);
         cents=num%100;
         num=Math.floor(num/100).toString();
         if(cents<10){
             cents="0"+cents;
         }
         for(var i=0;i<Math.floor((num.length-(1+i))/3);i++){
-            num=num.substring(0,num.length-(4*i+3))+','+num.substring(num.length-(num.length-(4*i+3));
+            num = num.substring(0,num.length-(4*i+3))+','+num.substring(num.length-(4*i+3));
         }
         return (((sign)?'':'-')+num+'.'+cents);
     }
@@ -144,21 +197,21 @@
     function  syncSelect() {
         var selectAll=true;
         $(".cartProductItemIfSelected").each(function () {
-            if("false"==$(this).attr(selectit)){
+            if("false"==$(this).attr("selectit")){
                 selectAll=false;
             }
         });
         if(selectAll)
-            $("img.selectAllItem").attr("src","http://127.0.0.1/tmall/img/site/cartSelected.png");
+            $("img.selectAllItem").attr("src","https://how2j.cn/tmall/img/site/cartSelected.png");
         else
-            $("img.selectAllItem").attr("src","http://127.0.0.1/tmall/img/site/cartNotSelected.png");
+            $("img.selectAllItem").attr("src","https://how2j.cn/tmall/img/site/cartNotSelected.png");
     }
     //显示选中商品的总数及总价格。
     function calcCartSumPriceAndNumber(){
         var sum=0;
         var totalNumber=0;
         //selectit='selectit'  遍历被选中的商品
-        $("img.cartProductItemIfSelected[selectit='selectit']")。each(function () {
+        $("img.cartProductItemIfSelected[selectit='selectit']").each(function () {
             var oiid=$(this).attr("oiid");
             //text 属性可设置或返回选项的文本值。
             var price=$(".cartProductItemSmallSumPrice[oiid="+oiid+"]").text();
@@ -176,29 +229,29 @@
         $("span.cartSumNumber").html(totalNumber);
     }
     //根据商品数量，同步计算价格，再同步修改总数和总价格
-    function syncPrice(pid,num,price() {
-        $(".orderItemNumberSetting[pid="+pid+"]").va(num);
+    function syncPrice(pid,num,price) {
+        $(".orderItemNumberSetting[pid="+pid+"]").val(num);
         //计算并修改格式
         var cartProductItemSmallSumPrice=formatMoney(num*price);
         //更改显示的数据
         $(".cartProductItemSmallSumPrice[pid="+pid+"]").html("￥"+cartProductItemSmallSumPrice);
-        调用计算
+        //调用计算
         calcCartSumPriceAndNumber();
     }
 
     $(function () {
         //选择商品触发点击事件
         $("img.cartProductItemIfSelected").click(function () {
-            var select=$(this).attr("selectit")
-            if("seletit"==select){
-                $(this).attr("src","http://127.0.0.1/tmall/img/site/cartNotSelected.png");
-                $(this).attr("selectit","false")
+            var selectit = $(this).attr("selectit")
+            if("selectit"==selectit){
+                $(this).attr("src","https://how2j.cn/tmall/img/site/cartNotSelected.png");
+                $(this).attr("selectit","false");
                 //修改该关键字的父类并且修改其css标签
                 $(this).parents("tr.cartProductItemTR").css("background-color","#fff");
             }
             else{
-                $(this).attr("src","http://127.0.0.1/tmall/img/site/cartSelected.png");
-                $(this).attr("selectit","selectit")
+                $(this).attr("src","https://how2j.cn/tmall/img/site/cartSelected.png");
+                $(this).attr("selectit","selectit");
                 $(this).parents("tr.cartProductItemTR").css("background-color","#FFF8E1");
             }
             //是否全选
@@ -208,10 +261,75 @@
             //计算
             calcCartSumPriceAndNumber();
         })
-    })
+        //商品全选
+        $("img.selectAllItem").click(function () {
+            var selectit=$(this).attr("selectit")
+            //若已经全选状态，变成全不选
+            if("selectit"==selectit){
+                $("img.selectAllItem").attr("src","https://how2j.cn/tmall/img/site/cartNotSelected.png");
+                $("img.selectAllItem").attr("selectit","false")
+                $(".cartProductItemIfSelected").each(function () {
+                    $(this).attr("src","https://how2j.cn/tmall/img/site/cartNotSelected.png");
+                    $(this).attr("selectit","false");
+                    $(this).parents("tr.cartProductItemTR").css("background-color","#fff");
+                });
+            }
+            //若全不选，变全选
+            else{
+                $("img.selectAllItem").attr("src","https://how2j.cn/tmall/img/site/cartSelected.png");
+                $("img.selectAllItem").attr("selectit","selectit")
+                $(".cartProductItemIfSelected").each(function(){
+                    $(this).attr("src","https://how2j.cn/tmall/img/site/cartSelected.png");
+                    $(this).attr("selectit","selectit");
+                    $(this).parents("tr.cartProductItemTR").css("background-color","#FFF8E1");
+                });
+            }
+            synCreateOrderButton();
+            calcCartSumPriceAndNumber();
+        });
+        $(".numberPlus").click(function () {
+            var pid=$(this).attr("pid");
+            var stock=$("span.orderItemStock[pid="+pid+"]").text();
+            var price=$("span.orderItemPromotePrice[pid="+pid+"]").text();
+            var num=$(".orderItemNumberSetting[pid="+pid+"]").val();
+            num++;
+            if(num>stock) num=stock;
+            //同步价格
+            syncPrice(pid,num,price);
+        })
+        $(".numberMinus").click(function () {
+            var pid=$(this).attr("pid");
+            var stock= $("span.orderItemStock[pid="+pid+"]").text();
+            var price= $("span.orderItemPromotePrice[pid="+pid+"]").text();
+            var num= $(".orderItemNumberSetting[pid="+pid+"]").val();
+            --num;
+            if(num<=0)
+                num=1;
+            syncPrice(pid,num,price);
+        });
+        $(".orderItemNumberSetting").onkeyup(function () {
+            var pid=$(this).attr("pid");
+            var stock= $("span.orderItemStock[pid="+pid+"]").text();
+            var price= $("span.orderItemPromotePrice[pid="+pid+"]").text();
+            var num= $(".orderItemNumberSetting[pid="+pid+"]").val();
+            num = parseInt(num);
+            if(isNaN(num))
+                num= 1;
+            if(num<=0)
+                num = 1;
+            if(num>stock)
+                num = stock;
+            syncPrice(pid,num,price);
+        });
+    });
 
 </script>
-
+<div class="cartDiv">
+    <div class="cartTitle pull-right">
+        <span>已选商品  (不含运费)</span>
+        <span class="cartTitlePrice">￥0.00</span>
+        <button class="createOrderButton" style="background-color: rgb(170, 170, 170);" disabled="disabled">结 算</button>
+    </div>
 <div class="cartDiv">
     <div class="cartProductList">
         <table class="cartProductTable">
@@ -306,6 +424,18 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    </div>
+    <div class="cartFoot">
+        <img src="https://how2j.cn/tmall/img/site/cartNotSelected.png" class="selectAllItem" selectit="false">
+        <span>全选</span>
+        <!--         <a href="#">删除</a> -->
+        <div class="pull-right">
+            <span>已选商品 <span class="cartSumNumber">0</span> 件</span>
+            <span>合计 (不含运费): </span>
+            <span class="cartSumPrice">￥0.00</span>
+            <button class="createOrderButton" style="background-color: rgb(170, 170, 170);" disabled="disabled">结  算</button>
+        </div>
     </div>
 </div>
 
